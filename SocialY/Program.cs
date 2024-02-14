@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SocialY.Data;
 using SocialY.Data.Repository;
+using SocialY.Data.Repository.IRepositry;
 
 var builder = WebApplication.CreateBuilder(args);
 

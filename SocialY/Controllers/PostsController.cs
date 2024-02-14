@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SocialY.Data;
-using SocialY.Data.Repository;
+using SocialY.Data.Repository.IRepositry;
 using SocialY.Models;
 using SocialY.Models.Dto;
 
@@ -97,12 +97,19 @@ namespace SocialY.Controllers
                 return NotFound();
             }
 
-            var post = await _postRepository.GetPostByIdAsync(id);
+            var post = _postRepository.GetPostByIdAsync(id).Result;
 
             if (post == null)
             {
                 return NotFound();
             }
+
+            if (post.Author != User.Identity.Name)
+            {
+                ViewData["ErrorMessage"] = "You cannot edit posts created by other users.";
+                return View("Error");
+            }
+
             return View(post);
         }
 
@@ -110,11 +117,17 @@ namespace SocialY.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Author,ImageUrl")] Post post)
+        public async Task<IActionResult> Edit(int id, Post post)
         {
             if (id != post.Id)
             {
                 return NotFound();
+            }
+
+            if (post.Author != User.Identity.Name)
+            {
+                ViewData["ErrorMessage"] = "You cannot edit posts created by other users.";
+                return View("Error");
             }
 
             if (ModelState.IsValid)
@@ -155,6 +168,12 @@ namespace SocialY.Controllers
                 return NotFound();
             }
 
+            if (post.Author != User.Identity.Name)
+            {
+                ViewData["ErrorMessage"] = "You cannot edit posts created by other users.";
+                return View("Error");
+            }
+
             return View(post);
         }
 
@@ -165,6 +184,13 @@ namespace SocialY.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var post = await _postRepository.GetPostByIdAsync(id);
+
+            if (post.Author != User.Identity.Name)
+            {
+                ViewData["ErrorMessage"] = "You cannot edit posts created by other users.";
+                return View("Error");
+            }
+
             if (post != null)
             {
                 await _postRepository.DeletePostAsync(id);

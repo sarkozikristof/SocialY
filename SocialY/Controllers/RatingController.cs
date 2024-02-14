@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SocialY.Data.Repository;
+using SocialY.Data.Repository.IRepositry;
 using SocialY.Models;
 
 namespace SocialY.Controllers
@@ -42,15 +42,25 @@ namespace SocialY.Controllers
                     return NotFound();
                 }
 
-                var newRating = new UserRating
+                var existingRating = post.Ratings.FirstOrDefault(r => r.UserId == User.Identity.Name);
+                if (existingRating == null)
                 {
-                    UserId = User.Identity.Name,
-                    PostId = post.Id,
-                    CreativityRating = creativityRating,
-                    UniqunessRating = uniquenessRating
-                };
+                    existingRating.CreativityRating = creativityRating;
+                    existingRating.UniqunessRating = uniquenessRating;
+                }
+                else
+                {
+                    var newRating = new UserRating
+                    {
+                        UserId = User.Identity.Name,
+                        PostId = post.Id,
+                        CreativityRating = creativityRating,
+                        UniqunessRating = uniquenessRating
+                    };
 
-                post.Ratings.Add(newRating);
+                    post.Ratings.Add(newRating);
+                }
+
                 await _postRepository.UpdatePostAsync(post);
 
                 return RedirectToAction("Index", "Posts");

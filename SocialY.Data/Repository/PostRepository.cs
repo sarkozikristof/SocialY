@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SocialY.Data.Repository.IRepositry;
 using SocialY.Models;
 using System;
 using System.Collections.Generic;

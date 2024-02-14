@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SocialY.Data.Repository
+namespace SocialY.Data.Repository.IRepositry
 {
     public interface IPostRepository
     {
