@@ -25,7 +25,7 @@ namespace SocialY.Data.Repository
 
         public async Task<Post> GetPostByIdAsync(int? id)
         {
-            return await _context.Post.FirstOrDefaultAsync(m => m.Id == id);
+            return await _context.Post.Include(p => p.Ratings).FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public async Task AddPostAsync(Post post)

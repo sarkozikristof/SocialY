@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Posts</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-primary">Create New</a>
@@ -44,10 +44,10 @@
 
             <tr class="postRow">
                 <td>
-                    @Html.DisplayFor(modelItem => item.Title)
+                    <b>@Html.DisplayFor(modelItem => item.Title)</b>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Description)
+                @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Author)
@@ -56,17 +56,17 @@
                     <img src="@item.ImageUrl" alt="Picture" width="200" />
                 </td>
                 <td>
-                    <p>Creativity Average: 10/ @creativityAverage</p>
-                    <p>Uniqueness Average: 10/ @uniquenessAverage</p>
-                    <p>Ratings Count: @item.Ratings.Count</p>
-                    <p>
-                        <a asp-controller="Rating" asp-action="RatePost" asp-route-postId="@item.Id">Rate this Post yourself!</a>
-                    </p>
+                <p><b>Creativity</b> Average: 10/ @creativityAverage</p>
+                <p><b>Uniqueness</b> Average: 10/ @uniquenessAverage</p>
+                <p>Ratings Count: <b>@item.Ratings.Count</b></p>
+                <p>
+                    <a asp-controller="Rating" asp-action="RatePost" asp-route-postId="@item.Id">Rate this Post yourself!</a>
+                </p>
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
         }

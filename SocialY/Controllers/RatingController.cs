@@ -43,7 +43,7 @@ namespace SocialY.Controllers
                 }
 
                 var existingRating = post.Ratings.FirstOrDefault(r => r.UserId == User.Identity.Name);
-                if (existingRating == null)
+                if (existingRating != null)
                 {
                     existingRating.CreativityRating = creativityRating;
                     existingRating.UniqunessRating = uniquenessRating;

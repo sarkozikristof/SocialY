@@ -117,7 +117,7 @@ namespace SocialY.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Post post)
+        public async Task<IActionResult> Edit(int id, Post post, IFormFile file)
         {
             if (id != post.Id)
             {
@@ -129,11 +129,22 @@ namespace SocialY.Controllers
                 ViewData["ErrorMessage"] = "You cannot edit posts created by other users.";
                 return View("Error");
             }
-
+            ModelState.Remove("ImageUrl");
             if (ModelState.IsValid)
             {
                 try
                 {
+                    string filePath = @"images\post\";
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string postPath = Path.Combine(_webHost.WebRootPath, filePath);
+
+                    using (FileStream stream = new FileStream(Path.Combine(postPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+
+                    post.ImageUrl = filePath + fileName;
+
                     await _postRepository.UpdatePostAsync(post);
                 }
                 catch (DbUpdateConcurrencyException)
